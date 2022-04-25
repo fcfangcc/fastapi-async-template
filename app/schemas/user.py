@@ -1,7 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
-from .base import PagingResult
+from app.schemas.base import PagingResult
 
 
 # Shared properties
@@ -9,6 +9,7 @@ class UserBase(BaseModel):
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_superuser: bool = False
+    username: Optional[str] = None
 
 
 # Properties to receive via API on creation

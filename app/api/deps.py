@@ -1,28 +1,19 @@
-from typing import Generator, AsyncGenerator, AsyncContextManager, Callable
+from typing import AsyncGenerator, AsyncContextManager, Callable
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, Query
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
-from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
 from app.core import security
 from app.core.config import settings
-from app.db.session import SessionLocal, AsyncSessionLocal
+from app.db.session import AsyncSessionLocal
 from app.commons.response import LoginException, NotPermittedError
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
-
-
-def get_db() -> Generator[Session, None, None]:
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
 
 
 async def get_paging_params(page: int = Query(1, ge=1), per_page: int = Query(20, ge=1)) -> schemas.PagingParams:

@@ -1,11 +1,13 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Body
+from fastapi.encoders import jsonable_encoder
+from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
 from app.api import deps
-from app.commons.response import DuplicatedError, NotFoundException
+from app.commons.response import DuplicatedError, NotFoundException, NotPermittedError
 
 router = APIRouter(prefix="/users")
 
@@ -38,6 +40,52 @@ async def read_users(
     """
     total, users = await crud.user.get_multi(db, skip=paging.skip, limit=paging.limit)
     return paging.populate_result(total, list(users))
+
+
+@router.get("/me", response_model=schemas.User)
+async def read_user_me(current_user: models.User = Depends(deps.get_current_active_user)) -> Any:
+    """
+    Get current user.
+    """
+    return current_user
+
+
+@router.put("/me", response_model=schemas.User)
+async def update_user_me(
+    *,
+    db: AsyncSession = Depends(deps.get_async_db),
+    password: str = Body(None),
+    email: EmailStr = Body(None),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Update own user.
+    """
+    current_user_data = jsonable_encoder(current_user)
+    user_in = schemas.UserUpdate(**current_user_data)
+    if password is not None:
+        user_in.password = password
+    if email is not None:
+        user_in.email = email
+    user = await crud.user.update(db, db_obj=current_user, obj_in=user_in)
+    return user
+
+
+@router.get("/{user_id}", response_model=schemas.User)
+async def read_user_by_id(
+    user_id: int,
+    current_user: models.User = Depends(deps.get_current_active_user),
+    db: AsyncSession = Depends(deps.get_async_db),
+) -> Any:
+    """
+    Get a specific user by id.
+    """
+    user = await crud.user.get(db, id=user_id)
+    if user == current_user:
+        return user
+    if not crud.user.is_superuser(current_user):
+        raise NotPermittedError("The user doesn't have enough privileges")
+    return user
 
 
 @router.put("/{user_id}", response_model=schemas.User)
