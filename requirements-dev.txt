@@ -1,0 +1,13 @@
+
+pre-commit
+pytest==6.2.4
+pytest-cover==3.0.0
+pytest-mock==3.6.1
+pytest-asyncio==0.15.1
+
+yapf==0.31.0
+flake8==3.7
+
+mypy
+sqlmypy
+sqlalchemy-stubs==04
