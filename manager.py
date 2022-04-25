@@ -8,7 +8,7 @@ class DBTools:
         from app.default import insert_default_data
         from app.api.deps import async_db_context
         async with async_db_context() as session:
-            await session.run_sync(insert_default_data)
+            await insert_default_data(session)
 
 
 class Tools:

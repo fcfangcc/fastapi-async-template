@@ -1,11 +1,15 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.crud import user
 from app.schemas import UserCreate
 
 
-def insert_default_data(session: Session) -> None:
-    obj = UserCreate(email=settings.FIRST_SUPERUSER, password=settings.FIRST_SUPERUSER_PASSWORD)
-    obj.is_superuser = True
-    user.create(session, obj_in=obj)
+async def insert_default_data(session: AsyncSession) -> None:
+    if not await user.get_by_email(session, email=settings.FIRST_SUPERUSER):
+        obj = UserCreate(email=settings.FIRST_SUPERUSER, password=settings.FIRST_SUPERUSER_PASSWORD)
+        obj.is_superuser = True
+        await user.create(session, obj_in=obj)
+        print(f"{settings.FIRST_SUPERUSER} create successfully.")
+    else:
+        print(f"{settings.FIRST_SUPERUSER} user is exist.")
