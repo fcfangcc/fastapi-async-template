@@ -3,6 +3,7 @@ import asyncio
 
 import pytest
 import pytest_asyncio
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine
 
@@ -28,6 +29,11 @@ def engine() -> Generator:
     engine.sync_engine.dispose()
 
 
+@pytest.fixture(scope="session")
+def app() -> FastAPI:
+    return create_app()
+
+
 @pytest_asyncio.fixture(scope="session")
 async def db(engine: AsyncEngine) -> AsyncGenerator:
     async with AsyncSession(engine) as session:
@@ -36,8 +42,8 @@ async def db(engine: AsyncEngine) -> AsyncGenerator:
 
 
 @pytest.fixture(scope="session")
-def client() -> Generator:
-    with TestClient(create_app()) as c:
+def client(app: FastAPI) -> Generator:
+    with TestClient(app) as c:
         yield c
 
 
