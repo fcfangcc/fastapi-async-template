@@ -11,9 +11,17 @@ class DBTools:
             await insert_default_data(session)
 
 
+class ArqTools:
+    def run(self) -> None:
+        from arq.worker import run_worker
+        from app.tasks.startup import WorkerSettings
+        run_worker(WorkerSettings)  # type: ignore
+
+
 class Tools:
     def __init__(self) -> None:
         self.db = DBTools()
+        self.arq = ArqTools()
 
     def runserver(self, host: str = "127.0.0.1", port: int = 8000) -> None:
         import uvicorn

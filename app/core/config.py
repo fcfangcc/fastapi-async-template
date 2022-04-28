@@ -53,6 +53,16 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
 
+    # arq config
+    ARQ_REDIS_DSN: str = "redis://localhost:6379/1"
+    ARQ_QUEUE_NAME: str = ""
+
+    @validator("ARQ_QUEUE_NAME", pre=True)
+    def get_arq_queue_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
+        if not v:
+            return values["PROJECT_NAME"] + ":"
+        return v
+
     class Config:
         case_sensitive = True
         env_file = '.env'

@@ -1,47 +1,24 @@
-import pathlib
-import logging
-from logging import Logger, StreamHandler, Handler
-from logging.handlers import RotatingFileHandler
-
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1 import api_router
 from app.core.config import settings
 from app.handlers import init_error_handles
-
-
-def setup_logger(
-    name: str,
-    level: int = logging.INFO,
-    debug: bool = False,
-    path: str = "./logs/app.log",
-    max_bytes: int = 25 * 1024 * 1024,
-    backup_count: int = 5
-) -> Logger:
-    if debug:
-        level = logging.DEBUG
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-
-    DEFAULT_FORMAT = (
-        "%(asctime)s.%(msecs)03d [%(threadName)s] %(levelname)s "
-        "%(pathname)s(%(funcName)s:%(lineno)d) - %(message)s"
-    )
-    DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-    formatter = logging.Formatter(DEFAULT_FORMAT, datefmt=DATE_FORMAT)
-    pathlib.Path(path).absolute().parent.mkdir(parents=True, exist_ok=True)
-    handlers: list[Handler] = [StreamHandler(), RotatingFileHandler(path, maxBytes=max_bytes, backupCount=backup_count)]
-    for handler in handlers:
-        handler.setLevel(level)
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-    return logger
+from app.tasks.client import arq_client
+from app.utils import setup_logger
 
 
 def create_app() -> FastAPI:
     setup_logger("app")
     app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json")
+
+    @app.on_event('startup')
+    async def starup_event() -> None:
+        await arq_client.create_pool(settings.ARQ_REDIS_DSN, settings.ARQ_QUEUE_NAME)
+
+    @app.on_event('shutdown')
+    async def shutdown_event() -> None:
+        await arq_client.close_pool()
 
     # Set all CORS enabled origins
     if settings.BACKEND_CORS_ORIGINS:

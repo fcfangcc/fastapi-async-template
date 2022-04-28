@@ -9,3 +9,5 @@ aiomysql==0.1.0
 python-multipart==0.0.5
 
 alembic==1.7.7
+
+arq==0.22
