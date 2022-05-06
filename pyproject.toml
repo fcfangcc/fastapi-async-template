@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "fastapi-async-template"
+version = "0.1.0"
+description = "A Python Async Project Template With FastAPI and SQLAlchemy"
+authors = ["fcfangcc <swjfc22@live.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlalchemy = "(>=1.4.0,<2.0.0)"
+werkzeug = "2.1.1"
+fastapi = "0.75"
+pydantic = { version = "^1.9", extras = ["email","dotenv"] }
+python-jose = "3.3.0"
+uvicorn = "0.17.6"
+passlib = "1.7.4"
+python-multipart = "0.0.5"
+aiomysql = { version = "^0.1.0", optional = true }
+fire = "^0.4.0"
+
+[tool.poetry.dev-dependencies]
+alembic = "^1.7.7"
+pre-commit = "*"
+pytest = "^6.2.4"
+pytest-cover = "^3.0.0"
+pytest-mock = "^3.6.1"
+pytest-asyncio = "^0.18.3"
+requests = "*"
+yapf = "^0.31.0"
+flake8 = "^3.7"
+mypy = "*"
+sqlalchemy-stubs = "^0.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.extras]
+mysql = ["aiomysql"]
+
+# if your need
+# https://python-poetry.org/docs/repositories/#install-dependencies-from-a-private-repository
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+
+
+[tool.mypy]
+files = "app"
+plugins = "pydantic.mypy, sqlmypy"
+ignore_missing_imports = true
+disallow_untyped_defs = true
