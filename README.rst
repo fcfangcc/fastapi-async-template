@@ -11,8 +11,7 @@ How to use
 
     # git clone https://github.com/fcfangcc/fastapi-async-template.git
 
-
-Create a env configuration   
+Create a env configuration
 
 .. code:: shell
 
@@ -34,9 +33,9 @@ Start develop web service
 
 .. code:: shell
 
-    # pip install -r requirements.txt
-    # python manager.py db init 
-    # python manager.py runserver --port 8000
+    # poetry install --no-dev --extras "mysql"
+    # poetry run python manager.py db init
+    # poetry run python manager.py runserver --port 8000
 
 Deploy with dockert
 
@@ -51,4 +50,3 @@ Dependencies
 ===========================
 * `FastAPI <https://fastapi.tiangolo.com/>`_
 * `SQLAlchemy <https://www.sqlalchemy.org/>`_  version > 1.4
-

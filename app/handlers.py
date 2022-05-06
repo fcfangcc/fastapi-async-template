@@ -1,9 +1,11 @@
 from typing import Any, Optional
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
 
 from app.commons.response import ApiException
+
 
 VALIDATION_ERROR = "VALIDATION_ERROR"
 
@@ -22,9 +24,9 @@ def init_error_handles(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def valid_exception_handler(_: Request, exc: RequestValidationError) -> JSONResponse:
         try:
-            params = {}
+            params: Any = {}
             for i in exc.errors():
-                params[i.get('loc')[-1]] = i.get('msg', None)  # type: ignore
+                params[i.get('loc')[-1]] = i.get('msg', None)
         except Exception:
-            params = {"error": exc.errors()}  # type: ignore
+            params = {"error": exc.errors()}
         return json_error(VALIDATION_ERROR, "params error", 400, params=params)
