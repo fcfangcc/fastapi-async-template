@@ -33,7 +33,7 @@ Start develop web service
 
 .. code:: shell
 
-    # poetry install --no-dev --extras "mysql"
+    # poetry install -E mysql --no-dev
     # poetry run python manager.py db init
     # poetry run python manager.py runserver --port 8000
 
