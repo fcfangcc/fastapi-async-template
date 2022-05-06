@@ -5,9 +5,11 @@ from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
+
     # SECRET_KEY: str = secrets.token_urlsafe(32)
     SECRET_KEY: str = "35C18Sr5YyUb"
     # 60 minutes * 24 hours * 8 days = 8 days
+
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
@@ -48,7 +50,7 @@ class Settings(BaseSettings):
     def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
         return bool(values.get("SMTP_HOST") and values.get("SMTP_PORT") and values.get("EMAILS_FROM_EMAIL"))
 
-    EMAIL_TEST_USER: EmailStr = "example@test.com"  # type: ignore
+    EMAIL_TEST_USER: EmailStr = EmailStr("example@test.com")
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
