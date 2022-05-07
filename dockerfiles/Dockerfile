@@ -1,8 +1,10 @@
-From tiangolo/uvicorn-gunicorn-fastapi:python3.9-slim
+From fcfangcc/uvicorn-gunicorn-fastapi-poetry:3.9
 
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir --upgrade -r /app/requirements.txt
-# RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+COPY ./pyproject.toml ./poetry.lock* /app/
+
+# Allow installing dev dependencies to run tests
+ARG INSTALL_DEV=false
+RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install -E mysql --no-root; else poetry install -E mysql --no-root --no-dev ; fi"
 
 COPY ./app/ /app/app
 COPY ./gunicorn_conf.py /app/gunicorn_conf.py
