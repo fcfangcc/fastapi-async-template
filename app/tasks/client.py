@@ -1,8 +1,8 @@
-from typing import Optional, Any
+from typing import Any, Optional
 
 from arq import create_pool
-from arq.jobs import Job
 from arq.connections import ArqRedis, RedisSettings
+from arq.jobs import Job
 
 
 class ArqClient:
@@ -21,8 +21,8 @@ class ArqClient:
         raise ValueError("pool is none.please init arq client.")
 
     async def notify_cron_task(self, task_name: str) -> Optional[Job]:
-
-        return await self._enqueue_job(f'cron:{task_name}')
+        task_name = task_name if task_name.startswith("cron:") else f'cron:{task_name}'
+        return await self._enqueue_job(task_name)
 
     async def task_demo(self, input1: str) -> Optional[Job]:
         return await self._enqueue_job('task_demo', input1=input1)

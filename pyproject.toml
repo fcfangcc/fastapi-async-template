@@ -16,6 +16,7 @@ passlib = "1.7.4"
 python-multipart = "0.0.5"
 aiomysql = { version = "^0.1.0", optional = true }
 fire = "^0.4.0"
+arq = "^0.22"
 
 [tool.poetry.dev-dependencies]
 alembic = "^1.7.7"
