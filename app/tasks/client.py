@@ -13,7 +13,7 @@ class ArqClient:
 
     async def close_pool(self) -> None:
         if self.pool:
-            await self.pool.close()
+            self.pool.close()
 
     async def _enqueue_job(self, function_name: str, **kwargs: Any) -> Optional[Job]:
         if self.pool:
