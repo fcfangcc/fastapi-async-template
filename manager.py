@@ -5,8 +5,8 @@ import fire
 
 class DBTools:
     async def init(self) -> None:
-        from app.command import insert_default_data
         from app.api.deps import async_db_context
+        from app.command import insert_default_data
         async with async_db_context() as session:
             await insert_default_data(session)
 

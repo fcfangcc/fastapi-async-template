@@ -1,5 +1,5 @@
-import logging
 from datetime import timedelta
+import logging
 from typing import Any
 
 from fastapi import APIRouter, Body, Depends
@@ -8,9 +8,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
 from app.api import deps
-from app.core.config import settings
-from app.core import security
 from app.commons.response import LoginException
+from app.core import security
+from app.core.config import settings
+
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

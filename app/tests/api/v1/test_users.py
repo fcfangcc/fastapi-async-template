@@ -1,11 +1,11 @@
-import pytest
 from fastapi.testclient import TestClient
+import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud
 from app.core.config import settings
-from app.tests.utils.utils import random_email, random_lower_string
 from app.tests.utils.user import create_random_user
+from app.tests.utils.utils import random_email, random_lower_string
 
 
 def test_get_users_superuser_me(client: TestClient, superuser_token_headers: dict[str, str]) -> None:

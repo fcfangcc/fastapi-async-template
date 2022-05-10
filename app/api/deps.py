@@ -1,5 +1,5 @@
-from typing import AsyncGenerator, AsyncContextManager, Callable
 from contextlib import asynccontextmanager
+from typing import AsyncContextManager, AsyncGenerator, Callable
 
 from fastapi import Depends, Query
 from fastapi.security import OAuth2PasswordBearer
@@ -8,10 +8,11 @@ from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
+from app.commons.response import LoginException, NotPermittedError
 from app.core import security
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal
-from app.commons.response import LoginException, NotPermittedError
+
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
 
