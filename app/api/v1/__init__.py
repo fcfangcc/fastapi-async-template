@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 
-from . import users
-from . import login
-from . import tasks
+from . import login, tasks, users
+
 
 api_router = APIRouter()
 api_router.include_router(users.router, tags=["user"])

@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 
+
 LOGIN_ERROR = "LOGIN_ERROR"
 NOT_FOUND = "NOT_FOUND"
 NOT_PERMITTED = "NOT_PERMITTED"

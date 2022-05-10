@@ -1,13 +1,13 @@
-import pathlib
-import logging
-from logging import Logger, StreamHandler, Handler
-from logging.handlers import RotatingFileHandler
 from datetime import datetime, timedelta
+import logging
+from logging import Handler, Logger, StreamHandler
+from logging.handlers import RotatingFileHandler
+import pathlib
 
 from jose import jwt
 
-from app.core.config import settings
 from app.commons.constant import ALGORITHM
+from app.core.config import settings
 
 
 def setup_logger(

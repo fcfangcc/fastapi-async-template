@@ -1,5 +1,7 @@
-from typing import TypeVar, Any
+from typing import Any, TypeVar
+
 from pydantic import BaseModel, PositiveInt
+
 
 MODEL_TYEP = TypeVar('MODEL_TYEP')
 

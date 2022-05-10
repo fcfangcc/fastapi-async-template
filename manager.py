@@ -5,8 +5,8 @@ import fire
 
 class DBTools:
     async def init(self) -> None:
-        from app.command import insert_default_data
         from app.api.deps import async_db_context
+        from app.command import insert_default_data
         async with async_db_context() as session:
             await insert_default_data(session)
 
@@ -14,8 +14,9 @@ class DBTools:
 class ArqTools:
     def run(self) -> None:
         from arq.worker import run_worker
+
         from app.tasks.startup import WorkerSettings
-        run_worker(WorkerSettings)  # type: ignore
+        run_worker(WorkerSettings)
 
 
 class Tools:
