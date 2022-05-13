@@ -21,7 +21,6 @@ fire = "^0.4.0"
 alembic = "^1.7.7"
 pre-commit = "*"
 pytest = "^6.2.4"
-pytest-cover = "^3.0.0"
 pytest-mock = "^3.6.1"
 pytest-asyncio = "^0.18.3"
 requests = "*"
@@ -29,6 +28,7 @@ yapf = "^0.31.0"
 flake8 = "^3.7"
 mypy = "*"
 sqlalchemy-stubs = "^0.4"
+pytest-cov = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -77,3 +77,18 @@ lines_between_types=1
 lines_after_imports=2
 src_paths=["app"]
 line_length = 119
+
+
+[tool.coverage.run]
+concurrency = ["greenlet","thread"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "def __repr__",
+    "if __name__ == .__main__.",
+    # "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+    "if debug:",
+]

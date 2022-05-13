@@ -27,6 +27,6 @@ def init_error_handles(app: FastAPI) -> None:
             params: Any = {}
             for i in exc.errors():
                 params[i.get('loc')[-1]] = i.get('msg', None)
-        except Exception:
+        except Exception:  # pragma: no cover
             params = {"error": exc.errors()}
         return json_error(VALIDATION_ERROR, "params error", 400, params=params)

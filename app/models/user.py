@@ -18,9 +18,3 @@ class User(Base):
 
     def __repr__(self) -> str:
         return '<User {0}>'.format(self.email)
-
-    def is_authenticated(self) -> bool:
-        return self.is_active
-
-    def is_anonymous(self) -> bool:
-        return False
