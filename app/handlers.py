@@ -12,7 +12,7 @@ VALIDATION_ERROR = "VALIDATION_ERROR"
 
 def json_error(err_code: str, msg: Optional[str] = None, status_code: int = 400, **kwargs: Any) -> JSONResponse:
     detial = {"code": err_code, "message": msg} | kwargs
-    error = {'ok': False, "detail": detial}
+    error = {"ok": False, "detail": detial}
     return JSONResponse(content=error, status_code=status_code)
 
 
@@ -26,7 +26,7 @@ def init_error_handles(app: FastAPI) -> None:
         try:
             params: Any = {}
             for i in exc.errors():
-                params[i.get('loc')[-1]] = i.get('msg', None)
+                params[i.get("loc")[-1]] = i.get("msg", None)
         except Exception:  # pragma: no cover
             params = {"error": exc.errors()}
         return json_error(VALIDATION_ERROR, "params error", 400, params=params)

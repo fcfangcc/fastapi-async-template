@@ -18,10 +18,10 @@ from app.tests.utils.utils import get_superuser_token_headers
 
 
 def pytest_addoption(parser: Parser) -> None:
-    parser.addoption('--cleardb', action=argparse.BooleanOptionalAction)
+    parser.addoption("--cleardb", action=argparse.BooleanOptionalAction)
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def event_loop() -> Generator:
     """Create an instance of the default event loop for each test case."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -52,6 +52,7 @@ async def db(engine: AsyncEngine) -> AsyncGenerator:
 async def init_database(engine: AsyncEngine, db: AsyncSession, request: pytest.FixtureRequest) -> None:
     if request.config.getoption("--cleardb", default=False):
         from app.db.base_class import Base
+
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
