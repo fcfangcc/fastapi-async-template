@@ -69,6 +69,7 @@ async def test_get_user(
 @pytest.mark.asyncio
 async def test_update_user(client: TestClient, superuser_token_headers: dict, db: AsyncSession) -> None:
     user, _ = await create_random_user(db)
+    user_id = user.id
     data = {"email": random_email(), "password": random_lower_string()}
     r = client.put(
         f"{settings.API_V1_STR}/users/{user.id}",
@@ -77,8 +78,8 @@ async def test_update_user(client: TestClient, superuser_token_headers: dict, db
     )
     assert r.status_code == 200
     api_user = r.json()
-    db.expire_all()  # 不然取到缓存的结果
-    existing_user = await crud.user.get_by_email(db, email=data["email"])
+    db.expire(user)  # 不然取到缓存的结果
+    existing_user = await crud.user.get(db, id=user_id)
     assert existing_user
     assert existing_user.email == api_user["email"]
     # user not existing
