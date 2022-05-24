@@ -48,7 +48,7 @@ jobs:
       run: |
         bash ./scripts/test.sh --cleardb --cov-report=xml
       env:
-        SQLALCHEMY_DATABASE_URI: mysql+aiomysql://testuser:testpassword@mysql:${{ job.services.mysql.ports[3306] }}/pytest?charset=utf8mb4
+        SQLALCHEMY_DATABASE_URI: mysql+aiomysql://testuser:testpassword@127.0.0.1:${{ job.services.mysql.ports[3306] }}/pytest?charset=utf8mb4
         FIRST_SUPERUSER: test${{ github.run_id }}@live.com
         FIRST_SUPERUSER_PASSWORD: test${{ github.run_id }}
         SECRET_KEY: testsecret
