@@ -1,7 +1,8 @@
 import logging
+import pathlib
+
 from logging import Handler, Logger, StreamHandler
 from logging.handlers import RotatingFileHandler
-import pathlib
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware

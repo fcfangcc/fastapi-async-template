@@ -50,15 +50,16 @@ files = "app"
 plugins = "pydantic.mypy, sqlmypy"
 ignore_missing_imports = true
 disallow_untyped_defs = true
-
+python_version = 3.9
 
 [tool.black]
 line-length = 119
 target-version = ['py39']
+include = '\.pyi?$'
 
 [tool.isort]
-profile="google"
-py_version = 310
+profile="black"
+py_version = 39
 force_single_line=false
 combine_as_imports=true
 lines_between_types=1

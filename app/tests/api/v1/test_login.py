@@ -1,6 +1,7 @@
-from fastapi.testclient import TestClient
 import pytest
 import requests
+
+from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.tests.utils.utils import random_email, random_lower_string

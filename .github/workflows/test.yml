@@ -18,6 +18,19 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10"]
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_PASSWORD: testpassword
+          MYSQL_USER: testuser
+          MYSQL_DATABASE: pytest
+        ports:
+          - 3306:3306
+        # needed because the mysql container does not provide a healthcheck
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -29,8 +42,13 @@ jobs:
       run: python -m pip install poetry
 
     - name: Install dependencies
-      run: poetry install
+      run: poetry install -E mysql
 
     - name: Test with pytest
       run: |
-        bash ./scripts/test.sh --cov-report=xml
+        bash ./scripts/test.sh --cleardb --cov-report=xml
+      env:
+        SQLALCHEMY_DATABASE_URI: mysql+aiomysql://testuser:testpassword@mysql:${{ job.services.mysql.ports[3306] }}/pytest?charset=utf8mb4
+        FIRST_SUPERUSER: test${{ github.run_id }}@live.com
+        FIRST_SUPERUSER_PASSWORD: test${{ github.run_id }}
+        SECRET_KEY: testsecret
