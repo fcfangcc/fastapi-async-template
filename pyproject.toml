@@ -24,11 +24,11 @@ pytest = "^6.2.4"
 pytest-mock = "^3.6.1"
 pytest-asyncio = "^0.18.3"
 requests = "*"
-yapf = "^0.31.0"
 flake8 = "^3.7"
 mypy = "*"
 sqlalchemy-stubs = "^0.4"
 pytest-cov = "^3.0.0"
+black = "^22.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -50,27 +50,16 @@ files = "app"
 plugins = "pydantic.mypy, sqlmypy"
 ignore_missing_imports = true
 disallow_untyped_defs = true
+python_version = 3.9
 
-
-[tool.yapf]
-BASED_ON_STYLE = "pep8"
-COLUMN_LIMIT = 120
-SPACES_BEFORE_COMMENT = 2
-SPLIT_COMPLEX_COMPREHENSION = true
-DEDENT_CLOSING_BRACKETS = true
-COALESCE_BRACKETS = true
-ALIGN_CLOSING_BRACKET_WITH_VISUAL_INDENT = true
-BLANK_LINE_BEFORE_MODULE_DOCSTRING = true
-ARITHMETIC_PRECEDENCE_INDICATION = true
-SPLIT_ALL_TOP_LEVEL_COMMA_SEPARATED_VALUES = true
-SPLIT_ALL_COMMA_SEPARATED_VALUES = false
-INDENT_DICTIONARY_VALUE = true
-BLANK_LINE_BEFORE_NESTED_CLASS_OR_DEF = false
-BLANK_LINES_BETWEEN_TOP_LEVEL_IMPORTS_AND_VARIABLES = 2
+[tool.black]
+line-length = 119
+target-version = ['py39']
+include = '\.pyi?$'
 
 [tool.isort]
-profile="google"
-py_version = 310
+profile="black"
+py_version = 39
 force_single_line=false
 combine_as_imports=true
 lines_between_types=1

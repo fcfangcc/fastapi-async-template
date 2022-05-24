@@ -1,6 +1,7 @@
-from fastapi.testclient import TestClient
 import pytest
 import requests
+
+from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.tests.utils.utils import random_email, random_lower_string
@@ -25,7 +26,7 @@ def test_login_error(client: TestClient) -> None:
         result = r.json()
         assert r.status_code == 400
         assert result["ok"] is False
-        assert result["detail"]["code"] == 'LOGIN_ERROR'
+        assert result["detail"]["code"] == "LOGIN_ERROR"
 
     login_data = {
         "username": settings.FIRST_SUPERUSER,

@@ -9,12 +9,12 @@ class User(Base):
     hashed_password = Column(String(length=128), nullable=False)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
-    channel = Column(String(length=20), default='InviteCode')
+    channel = Column(String(length=20), default="InviteCode")
 
-    create_time = Column(DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP'), comment="创建时间")
+    create_time = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"), comment="创建时间")
     modified_time = Column(
-        DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+        DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     )
 
     def __repr__(self) -> str:
-        return '<User {0}>'.format(self.email)
+        return "<User {0}>".format(self.email)

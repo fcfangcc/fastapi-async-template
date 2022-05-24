@@ -1,7 +1,8 @@
 import logging
+import pathlib
+
 from logging import Handler, Logger, StreamHandler
 from logging.handlers import RotatingFileHandler
-import pathlib
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
@@ -17,7 +18,7 @@ def setup_logger(
     debug: bool = False,
     path: str = "./logs/app.log",
     max_bytes: int = 25 * 1024 * 1024,
-    backup_count: int = 5
+    backup_count: int = 5,
 ) -> Logger:
     if debug:
         level = logging.DEBUG
@@ -25,13 +26,15 @@ def setup_logger(
     logger.setLevel(level)
 
     DEFAULT_FORMAT = (
-        "%(asctime)s.%(msecs)03d [%(threadName)s] %(levelname)s "
-        "%(pathname)s(%(funcName)s:%(lineno)d) - %(message)s"
+        "%(asctime)s.%(msecs)03d [%(threadName)s] %(levelname)s %(pathname)s(%(funcName)s:%(lineno)d) - %(message)s"
     )
     DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
     formatter = logging.Formatter(DEFAULT_FORMAT, datefmt=DATE_FORMAT)
     pathlib.Path(path).absolute().parent.mkdir(parents=True, exist_ok=True)
-    handlers: list[Handler] = [StreamHandler(), RotatingFileHandler(path, maxBytes=max_bytes, backupCount=backup_count)]
+    handlers: list[Handler] = [
+        StreamHandler(),
+        RotatingFileHandler(path, maxBytes=max_bytes, backupCount=backup_count),
+    ]
     for handler in handlers:
         handler.setLevel(level)
         handler.setFormatter(formatter)

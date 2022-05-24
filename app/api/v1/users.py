@@ -102,6 +102,8 @@ async def update_user(
     """
     user = await crud.user.get(db, id=user_id)
     if not user:
-        raise NotFoundException("The user with this username does not exist in the system", )
+        raise NotFoundException(
+            "The user with this username does not exist in the system",
+        )
     user = await crud.user.update(db, db_obj=user, obj_in=user_in)
     return user

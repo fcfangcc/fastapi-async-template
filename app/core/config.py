@@ -24,7 +24,7 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    PROJECT_NAME: str = 'ssmanager'
+    PROJECT_NAME: str = "ssmanager"
 
     SQLALCHEMY_DATABASE_URI: Optional[str] = None
 
@@ -57,8 +57,8 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
 
 settings = Settings()
