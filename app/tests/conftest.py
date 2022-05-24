@@ -33,7 +33,8 @@ def event_loop() -> Generator:
 
 @pytest.fixture(scope="session")
 def engine() -> Generator:
-    engine = create_engine()
+    # SET READ COMMITTED.
+    engine = create_engine(execution_options={"isolation_level": "READ COMMITTED"})
     yield engine
     engine.sync_engine.dispose()
 
