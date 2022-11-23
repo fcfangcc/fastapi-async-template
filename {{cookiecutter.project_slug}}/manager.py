@@ -20,7 +20,7 @@ class Tools:
         import uvicorn
 
         uvicorn.run(
-            "app.main:app",
+            "app.main:create_app",
             host=host,
             port=port,
             workers=1,

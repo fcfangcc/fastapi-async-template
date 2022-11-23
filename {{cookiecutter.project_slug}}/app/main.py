@@ -1,15 +1,13 @@
 import logging
 import pathlib
-
 from logging import Handler, Logger, StreamHandler
 from logging.handlers import RotatingFileHandler
-
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1 import api_router
 from app.core.config import settings
 from app.handlers import init_error_handles
+from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 
 def setup_logger(
@@ -59,6 +57,3 @@ def create_app() -> FastAPI:
     app.include_router(api_router, prefix=settings.API_V1_STR)
     init_error_handles(app)
     return app
-
-
-app = create_app()

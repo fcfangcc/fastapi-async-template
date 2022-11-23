@@ -9,7 +9,8 @@ How to use
 
 .. code:: shell
 
-    # git clone https://github.com/fcfangcc/fastapi-async-template.git
+    # pip install cookiecutter
+    # cookiecutter https://github.com/fcfangcc/fastapi-async-template.git
 
 Create a env configuration
 

@@ -43,9 +43,11 @@ jobs:
       run: python -m pip install poetry
 
     - name: Install dependencies
+      working-directory: ./{{cookiecutter.project_slug}}
       run: poetry install -E mysql
 
     - name: Test with pytest
+      working-directory: ./{{cookiecutter.project_slug}}
       run: |
         bash ./scripts/test.sh --cleardb --cov-report=xml
       env:
