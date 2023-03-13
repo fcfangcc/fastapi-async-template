@@ -4,7 +4,7 @@ COPY ./pyproject.toml ./poetry.lock* /app/
 
 # Allow installing dev dependencies to run tests
 ARG INSTALL_DEV=false
-RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install -E mysql --no-root; else poetry install -E mysql --no-root --no-dev ; fi"
+RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install; else poetry install --without dev ; fi"
 
 COPY ./app/ /app/app
 COPY ./gunicorn_conf.py /app/gunicorn_conf.py

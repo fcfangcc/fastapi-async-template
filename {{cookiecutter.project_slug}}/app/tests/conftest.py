@@ -13,7 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
 from app.command import insert_default_data
 from app.core.config import settings
-from app.db.session import create_engine
+from app.db.session import create_engine, set_async_engine
 from app.main import create_app
 from app.tests.utils.user import authentication_token_from_email
 from app.tests.utils.utils import get_superuser_token_headers
@@ -33,8 +33,15 @@ def event_loop() -> Generator:
 
 @pytest.fixture(scope="session")
 def engine() -> Generator:
+    if not settings.TEST_SQLALCHEMY_DATABASE_URI:
+        raise ValueError("TEST_SQLALCHEMY_DATABASE_URI is empty!!!")
+
     # SET READ COMMITTED.
-    engine = create_engine(execution_options={"isolation_level": "READ COMMITTED"})
+    engine = create_engine(
+        settings.TEST_SQLALCHEMY_DATABASE_URI,
+        # execution_options={"isolation_level": "READ COMMITTED"}
+    )
+    set_async_engine(create_engine(settings.TEST_SQLALCHEMY_DATABASE_URI))
     yield engine
     engine.sync_engine.dispose()
 
@@ -51,20 +58,30 @@ async def db(engine: AsyncEngine) -> AsyncGenerator:
     await session.close()
 
 
-@pytest_asyncio.fixture(scope="session")
-async def init_database(engine: AsyncEngine, db: AsyncSession, request: pytest.FixtureRequest) -> None:
-    if request.config.getoption("--cleardb", default=False):
-        from app.db.base_class import Base
+@pytest.fixture(scope="session")
+async def prepare_database(engine: AsyncEngine, request: pytest.FixtureRequest) -> AsyncGenerator:
+    from app.db.base_class import Base
 
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.drop_all)
-            await conn.run_sync(Base.metadata.create_all)
+    cleardb = request.config.getoption("--cleardb", default=True)
 
-        await insert_default_data(db)
+    async def _clear_db():
+        if cleardb:
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.drop_all)
+
+    await _clear_db()
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+        async with AsyncSession(engine) as session:
+            await insert_default_data(session)
+
+    yield
+
+    await _clear_db()
 
 
 @pytest.fixture(scope="session")
-def client(app: FastAPI, init_database: Any) -> Generator:
+def client(app: FastAPI, prepare_database: Any) -> Generator:
     with TestClient(app) as c:
         yield c
 

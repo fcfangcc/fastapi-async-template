@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "ssmanager"
 
     SQLALCHEMY_DATABASE_URI: Optional[str] = None
+    TEST_SQLALCHEMY_DATABASE_URI: Optional[str] = "sqlite+aiosqlite:///test.db"
 
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = None

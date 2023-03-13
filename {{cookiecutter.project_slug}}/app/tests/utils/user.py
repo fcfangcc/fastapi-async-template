@@ -21,7 +21,7 @@ def user_authentication_headers(*, client: TestClient, email: str, password: str
 async def create_random_user(db: AsyncSession) -> tuple[User, str]:
     email = random_email()
     password = random_lower_string()
-    user_in = UserCreate(username=email, email=email, password=password)
+    user_in = UserCreate(username=email, email=email, password=password, nick_name=email)
     user = await crud.user.create(db=db, obj_in=user_in)
     return user, password
 
@@ -34,7 +34,7 @@ async def authentication_token_from_email(*, client: TestClient, email: str, db:
     password = random_lower_string()
     user = await crud.user.get_by_email(db, email=email)
     if not user:
-        user_in_create = UserCreate(username=email, email=email, password=password)
+        user_in_create = UserCreate(username=email, email=email, password=password, nick_name=email)
         user = await crud.user.create(db, obj_in=user_in_create)
     else:
         user_in_update = UserUpdate(password=password)

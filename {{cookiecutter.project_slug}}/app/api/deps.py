@@ -11,7 +11,7 @@ from app import crud, models, schemas
 from app.commons.response import LoginException, NotPermittedError
 from app.core import security
 from app.core.config import settings
-from app.db.session import AsyncSessionLocal
+from app.db.session import get_session_local
 
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
@@ -23,7 +23,7 @@ async def get_paging_params(page: int = Query(1, ge=1), per_page: int = Query(20
 
 async def get_async_db() -> AsyncGenerator[AsyncSession, None]:
     try:
-        db = AsyncSessionLocal()
+        db = get_session_local()()
         yield db
     finally:
         await db.close()

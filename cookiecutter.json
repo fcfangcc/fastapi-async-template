@@ -1,11 +1,11 @@
 {
-    "project_name": "Base Project",
-    "project_slug": "{{ cookiecutter.project_name|lower|replace(' ', '-') }}",
-    "domain_main": "{{cookiecutter.project_slug}}.com",
-    "description": "A Python Async Project Template With FastAPI and SQLAlchemy!",
-    "author": "fcfangcc",
-    "author_email": "{{cookiecutter.project_slug}}@{{cookiecutter.domain_main}}",
-    "secret_key": "secret_key",
-    "first_superuser": "superuser@{{cookiecutter.domain_main}}",
-    "first_superuser_password": "first_superuser_password"
+  "project_name": "Base Project",
+  "project_slug": "{{ cookiecutter.project_name|lower|replace(' ', '-') }}",
+  "domain_main": "{{cookiecutter.project_slug}}.com",
+  "description": "A Python Async Project Template With FastAPI and SQLAlchemy!",
+  "author": "fcfangcc",
+  "author_email": "{{cookiecutter.project_slug}}@{{cookiecutter.domain_main}}",
+  "secret_key": "secret_key",
+  "first_superuser": "superuser@{{cookiecutter.domain_main}}",
+  "first_superuser_password": "first_superuser_password"
 }

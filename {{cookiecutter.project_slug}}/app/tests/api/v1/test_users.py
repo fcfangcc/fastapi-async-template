@@ -71,7 +71,7 @@ async def test_update_user(client: TestClient, superuser_token_headers: dict, db
     user, _ = await create_random_user(db)
     user_id = user.id
     db.expire(user)
-    db.commit()
+    await db.commit()
 
     data = {"email": random_email(), "password": random_lower_string()}
     r = client.put(
@@ -100,7 +100,7 @@ async def test_create_user_existing_username(
     client: TestClient, superuser_token_headers: dict, db: AsyncSession
 ) -> None:
     user, password = await create_random_user(db)
-    data = {"email": user.email, "password": password}
+    data = {"email": user.email, "password": password, "nick_name": user.email}
     r = client.post(
         f"{settings.API_V1_STR}/users",
         headers=superuser_token_headers,
@@ -115,13 +115,14 @@ async def test_create_user_existing_username(
 async def test_create_user(client: TestClient, superuser_token_headers: dict, db: AsyncSession) -> None:
     username = random_email()
     password = random_lower_string()
-    data = {"email": username, "password": password}
+    data = {"email": username, "password": password, "nick_name": username}
     r = client.post(
         f"{settings.API_V1_STR}/users",
         headers=superuser_token_headers,
         json=data,
     )
     created_user = r.json()
+    print(created_user)
     assert r.status_code == 200
     assert "email" in created_user
 
@@ -130,7 +131,7 @@ async def test_create_user(client: TestClient, superuser_token_headers: dict, db
 async def test_create_user_by_normal_user(client: TestClient, normal_user_token_headers: dict[str, str]) -> None:
     username = random_email()
     password = random_lower_string()
-    data = {"email": username, "password": password}
+    data = {"email": username, "password": password, "nick_name": username}
     r = client.post(
         f"{settings.API_V1_STR}/users",
         headers=normal_user_token_headers,
